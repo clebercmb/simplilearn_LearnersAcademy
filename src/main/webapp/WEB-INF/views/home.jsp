@@ -11,7 +11,7 @@
     <title>Home</title>
 </head>
 <body>
-    <%@include file="header.jsp"%>
+
     <div align="center">
         <h1>Home</h1>
 
@@ -21,18 +21,17 @@
 
         <br/><br/>
 
-        <h3>Master list of Subjects</h3>
-        <a href="registerSubject">Add</a>
-        <a href="subjectDashboard">Show All</a>
-
-        <br/><br/>
-
         <h3>Master list of Teachers</h3>
         <a href="registerTeacher">Add</a>
         <a href="teacherDashboard">Show All</a>
 
         <br/><br/>
 
+        <h3>Master list of Subjects</h3>
+        <a href="registerSubject">Add</a>
+        <a href="subjectDashboard">Show All</a>
+
+        <br/><br/>
 
         <h3>Master list of Classes</h3>
         <a href="registerClass">Add</a>
