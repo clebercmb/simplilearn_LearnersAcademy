@@ -1,16 +1,22 @@
 package com.example.modules.teacher.domain;
 
+import com.example.modules.subject.domain.Subject;
+
+import java.util.List;
+
 public class Teacher {
     private int id;
     private String name;
+
+    private List<Subject> subjectList;
 
 
     public Teacher() {
     }
 
-    public Teacher(int id, String name) {
-        this.id = id;
+    public Teacher(String name, List<Subject> subjectList) {
         this.name = name;
+        this.subjectList = subjectList;
     }
 
     public int getId() {
@@ -27,6 +33,14 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    public void setSubjectList(List<Subject> subjectList) {
+        this.subjectList = subjectList;
     }
 
     @Override

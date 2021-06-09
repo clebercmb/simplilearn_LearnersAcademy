@@ -1,5 +1,6 @@
 package com.example.modules.classes.domain;
 
+import com.example.modules.student.domain.Student;
 import com.example.modules.subject.domain.Subject;
 
 import java.util.List;
@@ -8,6 +9,7 @@ public class Class {
     private int id;
     private String name;
     private List<Subject> subjectList;
+    private List<Student> studentList;
 
 
     public Class() {
@@ -40,6 +42,14 @@ public class Class {
 
     public void setSubjectList(List<Subject> subjectList) {
         this.subjectList = subjectList;
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
     }
 
     @Override

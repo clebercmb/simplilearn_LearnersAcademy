@@ -1,9 +1,9 @@
 package com.example.modules.teacher.adapter.in.web;
 
+import com.example.modules.classes.adapter.in.web.AssignSubjectToClassCommand;
+import com.example.modules.classes.domain.Class;
 import com.example.modules.teacher.domain.Teacher;
-import com.example.modules.teacher.services.CreateTeacherService;
-import com.example.modules.teacher.services.DeleteTeacherService;
-import com.example.modules.teacher.services.GetAllTeacherService;
+import com.example.modules.teacher.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,13 +19,21 @@ public class TeacherController {
     private final CreateTeacherService createTeacherService;
     private final GetAllTeacherService getAllTeacherService;
     private final DeleteTeacherService deleteTeacherService;
+    private final GetTeacherWithSubjectsService getTeacherWithSubjectsService;
+    private final AssignSubjectToTeacherService assignSubjectToTeacherService;
 
-    public TeacherController(CreateTeacherService createTeacherService, GetAllTeacherService getAllTeacherService, DeleteTeacherService deleteTeacherService) {
+
+    public TeacherController(CreateTeacherService createTeacherService,
+                             GetAllTeacherService getAllTeacherService,
+                             DeleteTeacherService deleteTeacherService,
+                             GetTeacherWithSubjectsService getTeacherWithSubjectsService,
+                             AssignSubjectToTeacherService assignSubjectToTeacherService) {
         this.createTeacherService = createTeacherService;
         this.getAllTeacherService = getAllTeacherService;
         this.deleteTeacherService = deleteTeacherService;
+        this.getTeacherWithSubjectsService = getTeacherWithSubjectsService;
+        this.assignSubjectToTeacherService = assignSubjectToTeacherService;
     }
-
 
     @RequestMapping("registerTeacher")
     public String showRegisterTeacher(@ModelAttribute("teacherCommand") Teacher teacher, Model map) {
@@ -51,7 +59,7 @@ public class TeacherController {
         Teacher newTeacher = createTeacherService.execute(teacher);
         map.addAttribute("teacher", teacher);
 
-        return "successTeacher";
+        return "redirect:/teacherDashboard";
 
     }
 
@@ -66,5 +74,29 @@ public class TeacherController {
     }
 
 
+    @RequestMapping("showAssignTeacherToSubject")
+    public String showAssignSubjectToClass(Model map, @RequestParam String id) {
+        System.out.println("ClassController.showAssignSubjectToClass.id=" + id);
+
+        AssignTeacherToSubjectCommand assignTeacherToSubjectCommand;
+        assignTeacherToSubjectCommand = getTeacherWithSubjectsService.execute(Integer.parseInt(id));
+
+        map.addAttribute("assignTeacherToSubjectCommand", assignTeacherToSubjectCommand);
+
+        return "showAssignTeacherToSubject";
+    }
+
+
+    @RequestMapping("assignTeacherToSubject")
+    public String addAssignSubjectToClass(@ModelAttribute("assignTeacherToSubjectCommand") AssignTeacherToSubjectCommand assignTeacherToSubjectCommand, Model map){
+        System.out.println(">>>>>>ClassController.addAssignSubjectToClass");
+        System.out.println("ClassController.addAssignSubjectToClass="+ assignTeacherToSubjectCommand);
+
+        Teacher teacher = assignSubjectToTeacherService.execute(assignTeacherToSubjectCommand.getIdTeacher(), assignTeacherToSubjectCommand.getSubjectListIds());
+
+        map.addAttribute("teacher", teacher);
+
+        return "redirect:/teacherDashboard";
+    }
 
 }

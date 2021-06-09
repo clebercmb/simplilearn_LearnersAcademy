@@ -2,7 +2,6 @@ package com.example.modules.classes.adapter.in.web;
 
 import com.example.modules.classes.domain.Class;
 import com.example.modules.classes.services.*;
-import com.example.modules.subject.dto.SubjectSelectedViewDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,13 +20,24 @@ public class ClassController {
     private final AssignSubjectToClassService assignSubjectToClassService;
     private final GetClassWithSubjectsService getClassWithSubjectsService;
 
+    private final AssignStudentToClassService assignStudentToClassService;
+    private final GetClassWithStudentsService getClassWithStudentsService;
 
-    public ClassController(CreateClassService createClassService, GetAllClassService getAllClassService, DeleteClassService deleteClassService, AssignSubjectToClassService assignSubjectToClassService, GetClassWithSubjectsService getClassWithSubjectsService) {
+
+    public ClassController(CreateClassService createClassService,
+                           GetAllClassService getAllClassService,
+                           DeleteClassService deleteClassService,
+                           AssignSubjectToClassService assignSubjectToClassService,
+                           GetClassWithSubjectsService getClassWithSubjectsService,
+                           GetClassWithStudentsService getClassWithStudentsService,
+                           AssignStudentToClassService assignStudentToClassService) {
         this.createClassService = createClassService;
         this.getAllClassService = getAllClassService;
         this.deleteClassService = deleteClassService;
         this.assignSubjectToClassService = assignSubjectToClassService;
         this.getClassWithSubjectsService = getClassWithSubjectsService;
+        this.getClassWithStudentsService = getClassWithStudentsService;
+        this.assignStudentToClassService = assignStudentToClassService;
     }
 
     @RequestMapping("registerClass")
@@ -55,7 +64,7 @@ public class ClassController {
         Class newClass = createClassService.execute(aClass);
         map.addAttribute("aClass", aClass);
 
-        return "successClass";
+        return "redirect:/classDashboard";
 
     }
 
@@ -74,28 +83,7 @@ public class ClassController {
     public String showAssignSubjectToClass(Model map, @RequestParam String id) {
         System.out.println("ClassController.showAssignSubjectToClass.id=" + id);
 
-        AssignSubjectToClassCommand assignSubjectToClassCommand = new AssignSubjectToClassCommand();
-
-        Class aClass = new Class();
-        aClass.setId(Integer.parseInt(id));
-        aClass.setName("Class 1");
-
-        List<SubjectSelectedViewDto> subjectList = new ArrayList<>();
-
-        SubjectSelectedViewDto s1 = new SubjectSelectedViewDto(1, "Subject 1", "");
-        SubjectSelectedViewDto s2 = new SubjectSelectedViewDto(1, "Subject 2", "checked");
-        SubjectSelectedViewDto s3 = new SubjectSelectedViewDto(1, "Subject 3", "");
-        SubjectSelectedViewDto s4 = new SubjectSelectedViewDto(1, "Subject 4", "checked");
-
-        subjectList.add(s1);
-        subjectList.add(s2);
-        subjectList.add(s3);
-        subjectList.add(s4);
-
-        assignSubjectToClassCommand.setaClass(aClass);
-        assignSubjectToClassCommand.setSubjectList(subjectList);
-
-
+        AssignSubjectToClassCommand assignSubjectToClassCommand;
         assignSubjectToClassCommand = getClassWithSubjectsService.execute(Integer.parseInt(id));
 
         map.addAttribute("assignSubjectToClassCommand", assignSubjectToClassCommand);
@@ -113,20 +101,46 @@ public class ClassController {
 
         map.addAttribute("aClass", aClass);
 
-        return "successSubjectAssignToClass";
+        return "redirect:/classDashboard";
     }
+
+    @RequestMapping("showAssignStudentToClass")
+    public String showAssignStudentToClass(Model map, @RequestParam String id) {
+        System.out.println("ClassController.showAssignStudentToClass.id=" + id);
+
+        AssignStudentToClassCommand assignStudentToClassCommand;
+        assignStudentToClassCommand = getClassWithStudentsService.execute(Integer.parseInt(id));
+
+        map.addAttribute("assignStudentToClassCommand", assignStudentToClassCommand);
+
+        return "showAssignStudentToClass";
+    }
+
+
+    @RequestMapping("addAssignStudentToClass")
+    public String addAssignStudentToClass(@ModelAttribute("assignStudentToClassCommand") AssignStudentToClassCommand assignStudentToClassCommand, Model map){
+        System.out.println(">>>>>>ClassController.addAssignStudentToClass");
+        System.out.println("ClassController.addAssignStudentToClass="+ assignStudentToClassCommand);
+
+        Class aClass = assignStudentToClassService.execute(assignStudentToClassCommand.getIdClass(), assignStudentToClassCommand.getStudentListIds());
+
+        map.addAttribute("aClass", aClass);
+
+        return "redirect:/classDashboard";
+    }
+
 
 
     /**
      * This creates a new address object for the empty form and stuffs it into
      * the model
      */
-    @ModelAttribute("assignSubjectToClassCommand")
+    /*@ModelAttribute("assignSubjectToClassCommand")
     public AssignSubjectToClassCommand populateUser() {
         AssignSubjectToClassCommand assignSubjectToClassCommand = new AssignSubjectToClassCommand();
 
         return assignSubjectToClassCommand;
-    }
+    }*/
 
 
 }

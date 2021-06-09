@@ -31,6 +31,7 @@
                     <td><c:out value="${subject.id}"/></td>
                     <td><c:out value="${subject.name}"/></td>
                     <td><a href="<%=request.getContextPath()%>/deleteSubject?id=<c:out value="${subject.id}"/>">Delete</a></td>
+
                 </tr>
             </c:forEach>
 

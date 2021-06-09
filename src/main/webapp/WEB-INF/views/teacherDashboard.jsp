@@ -21,7 +21,8 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Action</th>
+                <th>Action 1</th>
+                <th>Action 2</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +31,7 @@
                 <tr>
                     <td><c:out value="${teacher.id}"/></td>
                     <td><c:out value="${teacher.name}"/></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignTeacherToSubject?id=<c:out value="${teacher.id}"/>">Assign Subjects</a></td>
                     <td><a href="<%=request.getContextPath()%>/deleteTeacher?id=<c:out value="${teacher.id}"/>">Delete</a></td>
                 </tr>
             </c:forEach>

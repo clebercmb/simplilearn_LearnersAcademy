@@ -23,7 +23,7 @@
                 <th>Name</th>
                 <th>Action 1</th>
                 <th>Action 2</th>
-
+                <th>Action 3</th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +32,8 @@
                 <tr>
                     <td><c:out value="${aClass.id}"/></td>
                     <td><c:out value="${aClass.name}"/></td>
-                    <td><a href="<%=request.getContextPath()%>/showAssignSubjectToClass?id=<c:out value="${aClass.id}"/>">Assign Subject</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignSubjectToClass?id=<c:out value="${aClass.id}"/>">Assign Subjects</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignStudentToClass?id=<c:out value="${aClass.id}"/>">Assign Students</a></td>
                     <td><a href="<%=request.getContextPath()%>/deleteClass?id=<c:out value="${aClass.id}"/>">Delete</a></td>
                 </tr>
             </c:forEach>

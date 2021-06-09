@@ -40,13 +40,6 @@
         <br/><br/>
 
 
-        <h3>Assign</h3>
-        <a href="assignSubjectToClass">Add</a>
-        <a href="">Show All</a>
-
-        <br/><br/>
-
-
     </div>
 
 

@@ -52,7 +52,7 @@ public class SubjectController {
         Subject newSubject = createSubjectService.execute(subject);
         map.addAttribute("subject", subject);
 
-        return "successSubject";
+        return "redirect:/subjectDashboard";
 
     }
 
@@ -65,6 +65,7 @@ public class SubjectController {
 
         return "redirect:/subjectDashboard";
     }
+
 
 
 }

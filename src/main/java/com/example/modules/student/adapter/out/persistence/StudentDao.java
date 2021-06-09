@@ -17,4 +17,8 @@ public interface StudentDao {
 
     public void delete(int id);
 
+    public List<Student> getStudentsWithoutClass();
+
+
+
 }

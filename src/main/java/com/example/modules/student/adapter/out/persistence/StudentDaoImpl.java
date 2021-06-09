@@ -57,4 +57,9 @@ public class StudentDaoImpl implements  StudentDao{
     public void delete(int id) {
         students.removeIf(s->s.getId()==id);
     }
+
+    @Override
+    public List<Student> getStudentsWithoutClass() {
+        return null;
+    }
 }

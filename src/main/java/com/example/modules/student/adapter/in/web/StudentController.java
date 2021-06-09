@@ -51,7 +51,7 @@ public class StudentController {
         Student newStudent = createStudentService.execute(student);
         map.addAttribute("student", student);
 
-        return "successStudent";
+        return "redirect:/studentDashboard";
 
     }
 
