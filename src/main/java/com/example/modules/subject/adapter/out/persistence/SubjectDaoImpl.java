@@ -1,58 +1,113 @@
 package com.example.modules.subject.adapter.out.persistence;
 
+import com.example.config.HibernateUtil;
 import com.example.modules.subject.domain.Subject;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class SubjectDaoImpl implements SubjectDao {
 
-    private static List<Subject> subjects = null;
-    private static int index = 0;
 
     public SubjectDaoImpl() {
-        if(subjects == null) {
-            subjects = new ArrayList<>();
-        }
+
     }
 
     @Override
     public Subject add(Subject subject) {
-        subject.setId(index+1);
-        index ++;
-        subjects.add(subject);
-        return subject;
+        System.out.println("Subject.add="+ subject);
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            session.save(subject);
+            System.out.println("subject added subject="+subject);
+            transaction.commit();
+            return subject;
+        } catch (Exception ex) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
     }
 
     @Override
     public Optional<Subject> get(int id) {
 
-        return subjects.stream().filter(s -> s.getId() == id).findFirst();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query query = session.createQuery("from Subject where  subjectId = :id");
+            query.setParameter("id", id);
+
+            List<?> list = query.list();
+            if(list.size() == 0) {
+                return Optional.empty();
+            }
+            Subject subject = (Subject) list.get(0);
+            return Optional.ofNullable(subject);
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
     }
 
     @Override
     public List<Subject> get() {
+
+        System.out.println("$$$$$$$$$Class.get");
+        List<Subject> subjects = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Query<Subject> query = session.createQuery("from Subject");
+            subjects = query.list();
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
 
         return subjects;
     }
 
     @Override
     public Subject update(Subject subjectUpdated) {
-        Optional<Subject> hasStudent = subjects.stream().filter(s->s.getId() == subjectUpdated.getId()).findFirst();
-        if (hasStudent.isPresent()) {
-            Subject student = hasStudent.get();
-            student.setName(subjectUpdated.getName());
-        }
+
         return null;
     }
 
     @Override
     public void delete(int id) {
 
-        subjects.removeIf(s->s.getId() == id);
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query query = session.createQuery("delete from Subject where subjectId = :id");
+            query.setParameter("id", id);
+
+            int result = query.executeUpdate();
+
+            System.out.println("$$$$$$$$$Subject delete.result = "+ result);
+
+            transaction.commit();
+        } catch (Exception ex) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
 
     }
 }

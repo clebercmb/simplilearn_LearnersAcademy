@@ -28,9 +28,9 @@
             <!--jsp:useBean id="$aClasses" scope="request" type="java.util.List"/-->
             <c:forEach var="subject"  items="${subjects}">
                 <tr>
-                    <td><c:out value="${subject.id}"/></td>
+                    <td><c:out value="${subject.subjectId}"/></td>
                     <td><c:out value="${subject.name}"/></td>
-                    <td><a href="<%=request.getContextPath()%>/deleteSubject?id=<c:out value="${subject.id}"/>">Delete</a></td>
+                    <td><a href="<%=request.getContextPath()%>/deleteSubject?id=<c:out value="${subject.subjectId}"/>">Delete</a></td>
 
                 </tr>
             </c:forEach>

@@ -29,10 +29,10 @@
             <!--jsp:useBean id="$aClasses" scope="request" type="java.util.List"/-->
             <c:forEach var="teacher"  items="${teachers}">
                 <tr>
-                    <td><c:out value="${teacher.id}"/></td>
+                    <td><c:out value="${teacher.teacherId}"/></td>
                     <td><c:out value="${teacher.name}"/></td>
-                    <td><a href="<%=request.getContextPath()%>/showAssignTeacherToSubject?id=<c:out value="${teacher.id}"/>">Assign Subjects</a></td>
-                    <td><a href="<%=request.getContextPath()%>/deleteTeacher?id=<c:out value="${teacher.id}"/>">Delete</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignTeacherToSubject?id=<c:out value="${teacher.teacherId}"/>">Assign Subjects</a></td>
+                    <td><a href="<%=request.getContextPath()%>/deleteTeacher?id=<c:out value="${teacher.teacherId}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
 

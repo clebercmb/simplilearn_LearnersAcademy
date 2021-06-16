@@ -3,29 +3,44 @@ package com.example.modules.classes.domain;
 import com.example.modules.student.domain.Student;
 import com.example.modules.subject.domain.Subject;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+@Entity
+@Table(name="class")
 public class Class {
-    private int id;
-    private String name;
-    private List<Subject> subjectList;
-    private List<Student> studentList;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="class_id")
+    private int classId;
+
+    @Column(name="name", nullable = false, length = 30)
+    private String name;
+
+    @ManyToMany(mappedBy = "classList", cascade = CascadeType.ALL
+            , fetch = FetchType.LAZY)
+    private Set<Subject> subjectList = new HashSet<>();
+
+    @OneToMany(targetEntity = Student.class, cascade =  CascadeType.ALL)
+    private List<Student> studentList;
 
     public Class() {
     }
 
-    public Class(String name, List<Subject> subjectList) {
+    public Class(String name, Set<Subject> subjectList) {
         this.name = name;
         this.subjectList = subjectList;
     }
 
-    public int getId() {
-        return id;
+    public int getClassId() {
+        return classId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setClassId(int id) {
+        this.classId = id;
     }
 
     public String getName() {
@@ -36,11 +51,11 @@ public class Class {
         this.name = name;
     }
 
-    public List<Subject> getSubjectList() {
+    public Set<Subject> getSubjectList() {
         return subjectList;
     }
 
-    public void setSubjectList(List<Subject> subjectList) {
+    public void setSubjectList(Set<Subject> subjectList) {
         this.subjectList = subjectList;
     }
 
@@ -55,7 +70,7 @@ public class Class {
     @Override
     public String toString() {
         return "Class{" +
-                "id=" + id +
+                "id=" + classId +
                 ", name='" + name + '\'' +
                 '}';
     }

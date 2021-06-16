@@ -14,7 +14,7 @@ public interface ClassDao {
 
     public List<Class> get();
 
-    public Class update(Class student);
+    public Optional<Object> update(Class student);
 
     public void delete(int id);
 

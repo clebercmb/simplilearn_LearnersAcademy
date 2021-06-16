@@ -24,17 +24,21 @@
                 <th>Action 1</th>
                 <th>Action 2</th>
                 <th>Action 3</th>
+                <th>Action 4</th>
+                <th>Action 5</th>
             </tr>
         </thead>
         <tbody>
             <!--jsp:useBean id="$aClasses" scope="request" type="java.util.List"/-->
             <c:forEach var="aClass"  items="${classes}">
                 <tr>
-                    <td><c:out value="${aClass.id}"/></td>
+                    <td><c:out value="${aClass.classId}"/></td>
                     <td><c:out value="${aClass.name}"/></td>
-                    <td><a href="<%=request.getContextPath()%>/showAssignSubjectToClass?id=<c:out value="${aClass.id}"/>">Assign Subjects</a></td>
-                    <td><a href="<%=request.getContextPath()%>/showAssignStudentToClass?id=<c:out value="${aClass.id}"/>">Assign Students</a></td>
-                    <td><a href="<%=request.getContextPath()%>/deleteClass?id=<c:out value="${aClass.id}"/>">Delete</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignSubjectToClass?id=<c:out value="${aClass.classId}"/>">Assign Subjects</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignTeacherToClass?id=<c:out value="${aClass.classId}"/>">Assign Teachers</a></td>
+                    <td><a href="<%=request.getContextPath()%>/showAssignStudentToClass?id=<c:out value="${aClass.classId}"/>">Assign Students</a></td>
+                    <td><a href="<%=request.getContextPath()%>/classReport?id=<c:out value="${aClass.classId}"/>">Class Report</a></td>
+                    <td><a href="<%=request.getContextPath()%>/deleteClass?id=<c:out value="${aClass.classId}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
 

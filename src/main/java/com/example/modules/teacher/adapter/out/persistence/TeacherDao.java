@@ -14,7 +14,7 @@ public interface TeacherDao {
 
     public List<Teacher> get();
 
-    public Teacher update(Teacher student);
+    public Optional<Object> update(Teacher student);
 
     public void delete(int id);
 

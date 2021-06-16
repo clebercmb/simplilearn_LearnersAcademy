@@ -1,13 +1,28 @@
 package com.example.modules.teacher.domain;
 
 import com.example.modules.subject.domain.Subject;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "teacher")
 public class Teacher {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="teacher_id")
+    private int teacherId;
+
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(name = "teacher_subject", joinColumns = { @JoinColumn(name = "teacher_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "subject_id") })
     private List<Subject> subjectList;
 
 
@@ -19,12 +34,12 @@ public class Teacher {
         this.subjectList = subjectList;
     }
 
-    public int getId() {
-        return id;
+    public int getTeacherId() {
+        return teacherId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTeacherId(int id) {
+        this.teacherId = id;
     }
 
     public String getName() {
@@ -46,7 +61,7 @@ public class Teacher {
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id +
+                "id=" + teacherId +
                 ", name='" + name + '\'' +
                 '}';
     }

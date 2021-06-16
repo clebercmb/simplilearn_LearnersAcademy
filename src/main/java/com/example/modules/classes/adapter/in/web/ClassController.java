@@ -130,17 +130,13 @@ public class ClassController {
     }
 
 
+    @RequestMapping("classReport")
+    public String classReport(Model map, @RequestParam String id) {
+        System.out.println("classReport.id="+ id);
 
-    /**
-     * This creates a new address object for the empty form and stuffs it into
-     * the model
-     */
-    /*@ModelAttribute("assignSubjectToClassCommand")
-    public AssignSubjectToClassCommand populateUser() {
-        AssignSubjectToClassCommand assignSubjectToClassCommand = new AssignSubjectToClassCommand();
+        return "classReport";
+    }
 
-        return assignSubjectToClassCommand;
-    }*/
 
 
 }

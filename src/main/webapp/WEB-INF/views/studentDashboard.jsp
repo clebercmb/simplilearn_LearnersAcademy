@@ -28,10 +28,10 @@
         <tbody>
             <c:forEach var="student"  items="${$students}">
                 <tr>
-                    <td><c:out value="${student.id}"/></td>
+                    <td><c:out value="${student.studentId}"/></td>
                     <td><c:out value="${student.name}"/></td>
                     <td><c:out value="${student.email}"/></td>
-                    <td><a href="<%=request.getContextPath()%>/deleteStudent?id=<c:out value="${student.id}"/>">Delete</a></td>
+                    <td><a href="<%=request.getContextPath()%>/deleteStudent?id=<c:out value="${student.studentId}"/>">Delete</a></td>
                 </tr>
             </c:forEach>
 

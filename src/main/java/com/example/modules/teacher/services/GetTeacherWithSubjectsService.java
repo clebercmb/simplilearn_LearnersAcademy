@@ -46,7 +46,7 @@ public class GetTeacherWithSubjectsService {
             return;
         }
         for(Subject subject: teacher.getSubjectList()) {
-            Optional<SubjectSelectedViewDto> hasSubjectDto =  subjectDtoList.stream().filter(s->s.getId() == subject.getId()).findFirst();
+            Optional<SubjectSelectedViewDto> hasSubjectDto =  subjectDtoList.stream().filter(s->s.getId() == subject.getSubjectId()).findFirst();
             hasSubjectDto.ifPresent(subjectSelectedViewDto -> subjectSelectedViewDto.setChecked("checked"));
         }
     }
@@ -55,7 +55,7 @@ public class GetTeacherWithSubjectsService {
         List<SubjectSelectedViewDto> subjectDtoList = new ArrayList<>();
         for (Subject subject : subjectList) {
             SubjectSelectedViewDto subjectDto = new SubjectSelectedViewDto();
-            subjectDto.setId(subject.getId());
+            subjectDto.setId(subject.getSubjectId());
             subjectDto.setName(subject.getName());
             subjectDtoList.add(subjectDto);
         }

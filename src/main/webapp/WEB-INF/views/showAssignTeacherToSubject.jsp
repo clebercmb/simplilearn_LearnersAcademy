@@ -20,9 +20,9 @@
         <sform:form method="post" action="assignTeacherToSubject"  modelAttribute="assignTeacherToSubjectCommand">
 
             <fieldset style="width: 500px">
-                <legend>Choose Subjects for:  <strong>${assignTeacherToSubjectCommand.teacher.id}-${assignTeacherToSubjectCommand.teacher.name} </strong></legend>
+                <legend>Choose Subjects for:  <strong>${assignTeacherToSubjectCommand.teacher.teacherId}-${assignTeacherToSubjectCommand.teacher.name} </strong></legend>
 
-                <sform:hidden path="idTeacher" value="${assignTeacherToSubjectCommand.teacher.id}"  />
+                <sform:hidden path="idTeacher" value="${assignTeacherToSubjectCommand.teacher.teacherId}"  />
                 <c:forEach items="${assignTeacherToSubjectCommand.subjectList}" var="subject">
                     <label>
                         <sform:checkbox path="subjectListIds" value="${subject.id}"    checked="${subject.checked}"  /> ${subject.name}

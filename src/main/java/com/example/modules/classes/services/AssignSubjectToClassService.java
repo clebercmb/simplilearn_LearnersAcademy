@@ -7,9 +7,7 @@ import com.example.modules.subject.adapter.out.persistence.SubjectDao;
 import com.example.modules.subject.domain.Subject;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -33,7 +31,7 @@ public class AssignSubjectToClassService {
         aClass = hasClass.get();
 
         if(subjectIdList == null || subjectIdList.size() == 0) {
-            aClass.setSubjectList(null);
+            aClass.setSubjectList(new HashSet<>());
             classDao.update(aClass);
             return aClass;
         }
@@ -41,7 +39,9 @@ public class AssignSubjectToClassService {
         List<Subject> subjectList = getSubjects(subjectIdList);
 
         if( subjectList.size() > 0 ) {
-            aClass.setSubjectList(subjectList);
+            Set<Subject> subjectSet = new HashSet<>(subjectList);
+
+            aClass.setSubjectList(subjectSet);
             classDao.update(aClass);
         }
 

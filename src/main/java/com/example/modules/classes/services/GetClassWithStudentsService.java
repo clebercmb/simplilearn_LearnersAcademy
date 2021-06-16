@@ -50,7 +50,7 @@ public class GetClassWithStudentsService {
             return;
         }
         for(Student student: aClass.getStudentList()) {
-            Optional<StudentSelectedViewDto> hasStudentDto =  studentDtoList.stream().filter(s->s.getId() == student.getId()).findFirst();
+            Optional<StudentSelectedViewDto> hasStudentDto =  studentDtoList.stream().filter(s->s.getId() == student.getStudentId()).findFirst();
             hasStudentDto.ifPresent(studentSelectedViewDto -> studentSelectedViewDto.setChecked("checked"));
         }
     }
@@ -59,7 +59,7 @@ public class GetClassWithStudentsService {
         List<StudentSelectedViewDto> studentDtoList = new ArrayList<>();
         for (Student student : studentList) {
             StudentSelectedViewDto studentDto = new StudentSelectedViewDto();
-            studentDto.setId(student.getId());
+            studentDto.setId(student.getStudentId());
             studentDto.setName(student.getName());
             studentDtoList.add(studentDto);
         }
@@ -72,7 +72,7 @@ public class GetClassWithStudentsService {
 
         List<Student> result = new ArrayList<>();
         for(Class aClass : classList) {
-            if( aClass.getId() == idClass || aClass.getStudentList() == null) {
+            if( aClass.getClassId() == idClass || aClass.getStudentList() == null) {
                 continue;
             }
             result.addAll(aClass.getStudentList());
@@ -85,7 +85,7 @@ public class GetClassWithStudentsService {
 
         for(Student student : studentList) {
 
-            if( assignedStudentList.stream().anyMatch(s->s.getId() == student.getId()) ) {
+            if( assignedStudentList.stream().anyMatch(s->s.getStudentId() == student.getStudentId()) ) {
                 continue;
             }
             result.add(student);

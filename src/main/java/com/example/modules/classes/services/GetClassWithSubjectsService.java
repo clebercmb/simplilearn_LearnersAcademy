@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.modules.classes.domain.Class;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public class GetClassWithSubjectsService {
             return;
         }
         for(Subject subject: aClass.getSubjectList()) {
-            Optional<SubjectSelectedViewDto> hasSubjectDto =  subjectDtoList.stream().filter(s->s.getId() == subject.getId()).findFirst();
+            Optional<SubjectSelectedViewDto> hasSubjectDto =  subjectDtoList.stream().filter(s->s.getId() == subject.getSubjectId()).findFirst();
             hasSubjectDto.ifPresent(subjectSelectedViewDto -> subjectSelectedViewDto.setChecked("checked"));
         }
     }
@@ -56,7 +57,7 @@ public class GetClassWithSubjectsService {
         List<SubjectSelectedViewDto> subjectDtoList = new ArrayList<>();
         for (Subject subject : subjectList) {
             SubjectSelectedViewDto subjectDto = new SubjectSelectedViewDto();
-            subjectDto.setId(subject.getId());
+            subjectDto.setId(subject.getSubjectId());
             subjectDto.setName(subject.getName());
             subjectDtoList.add(subjectDto);
         }

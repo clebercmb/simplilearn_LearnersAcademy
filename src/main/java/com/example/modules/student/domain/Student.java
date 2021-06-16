@@ -1,9 +1,20 @@
 package com.example.modules.student.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "student")
 public class Student {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="student_id")
+    private int studentId;
+
+    @Column(name = "name", nullable = false ,length = 50)
     private String name;
+
+    @Column(name = "email", nullable = true, length = 30)
     private String email;
 
     public Student() {
@@ -14,12 +25,12 @@ public class Student {
         this.email = email;
     }
 
-    public int getId() {
-        return id;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStudentId(int id) {
+        this.studentId = id;
     }
 
     public String getName() {
@@ -41,7 +52,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
+                "id=" + studentId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
