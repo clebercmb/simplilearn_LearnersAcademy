@@ -4,7 +4,6 @@ import com.example.modules.classes.adapter.out.persistence.ClassDao;
 import com.example.modules.classes.domain.Class;
 import com.example.modules.student.adapter.out.persistence.StudentDao;
 import com.example.modules.student.domain.Student;
-import com.example.modules.subject.domain.Subject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,8 +32,8 @@ public class AssignStudentToClassService {
         aClass = hasClass.get();
 
         if(studentIdList == null || studentIdList.size() == 0) {
-            aClass.setStudentList(null);
-            classDao.update(aClass);
+            aClass.setStudentList(new ArrayList<>());
+            classDao.addStudents(aClass);
             return aClass;
         }
 
@@ -42,7 +41,7 @@ public class AssignStudentToClassService {
 
         if( studentList.size() > 0 ) {
             aClass.setStudentList(studentList);
-            classDao.update(aClass);
+            classDao.addStudents(aClass);
         }
 
         return aClass;

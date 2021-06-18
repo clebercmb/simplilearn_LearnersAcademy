@@ -68,13 +68,14 @@ public class GetClassWithStudentsService {
 
     private List<Student> getAllAssignedStudentsExcludingIdClass(int idClass) {
 
-        List<Class> classList = classDao.get();
+        List<Class> classList = classDao.getAllAssignedStudentsExcludingIdClass(idClass);
 
         List<Student> result = new ArrayList<>();
         for(Class aClass : classList) {
             if( aClass.getClassId() == idClass || aClass.getStudentList() == null) {
                 continue;
             }
+            aClass.getStudentList().toString();
             result.addAll(aClass.getStudentList());
         }
         return result;

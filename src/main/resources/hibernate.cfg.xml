@@ -17,6 +17,7 @@
         <mapping class="com.example.modules.subject.domain.Subject"/>
         <mapping class="com.example.modules.student.domain.Student"/>
         <mapping class="com.example.modules.teacher.domain.Teacher"/>
+        <mapping class="com.example.modules.classes.domain.ClassSubjectTeacherLink"/>
 
         <!--mapping class="com.example.model.Instructor" /-->
         <!--mapping class="com.example.model.InstructorDetail" /-->

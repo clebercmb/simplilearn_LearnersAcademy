@@ -8,9 +8,7 @@ import com.example.modules.teacher.adapter.out.persistence.TeacherDao;
 import com.example.modules.teacher.domain.Teacher;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -34,12 +32,12 @@ public class AssignSubjectToTeacherService {
         teacher = hasTeacher.get();
 
         if(subjectIdList == null || subjectIdList.size() == 0) {
-            teacher.setSubjectList(null);
+            teacher.setSubjectList(new HashSet<>());
             teacherDao.update(teacher);
             return teacher;
         }
 
-        List<Subject> subjectList = getSubjects(subjectIdList);
+        Set<Subject> subjectList = getSubjects(subjectIdList);
 
         if( subjectList.size() > 0 ) {
             teacher.setSubjectList(subjectList);
@@ -49,8 +47,8 @@ public class AssignSubjectToTeacherService {
         return teacher;
     }
 
-    private List<Subject> getSubjects(List<Integer> subjectIdList) {
-        List<Subject> subjectList = new ArrayList<>();
+    private Set<Subject> getSubjects(List<Integer> subjectIdList) {
+        Set<Subject> subjectList = new HashSet<>();
         for (Integer subjectId : subjectIdList) {
             Optional<Subject> hasSubject = subjectDao.get(subjectId);
             if( !hasSubject.isPresent()) {

@@ -1,5 +1,6 @@
 package com.example.modules.subject.domain;
 
+import com.example.modules.classes.domain.ClassSubjectTeacherLink;
 import com.example.modules.teacher.domain.Teacher;
 import com.example.modules.classes.domain.Class;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -23,12 +24,15 @@ public class Subject {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "subject_class", joinColumns = { @JoinColumn(name = "subject_id") }, inverseJoinColumns = { @JoinColumn(name = "class_id") })
     private Set<Class> classList = new HashSet<>();
 
     @ManyToMany(mappedBy="subjectList")
     private List<Teacher> teacherList;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private Set<ClassSubjectTeacherLink> classSubjectTeacherLinks;
 
     public Subject() {
     }

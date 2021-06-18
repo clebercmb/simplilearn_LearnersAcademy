@@ -25,7 +25,7 @@
                 <sform:hidden path="idTeacher" value="${assignTeacherToSubjectCommand.teacher.teacherId}"  />
                 <c:forEach items="${assignTeacherToSubjectCommand.subjectList}" var="subject">
                     <label>
-                        <sform:checkbox path="subjectListIds" value="${subject.id}"    checked="${subject.checked}"  /> ${subject.name}
+                        <sform:checkbox path="subjectListIds" value="${subject.id}"  checked="${subject.checked}"  /> ${subject.name}
                     </label><br/>
                 </c:forEach>
                 <br/> <br/>

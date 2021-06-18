@@ -1,6 +1,5 @@
 package com.example.modules.classes.services;
 
-import com.example.modules.classes.adapter.in.web.AssignSubjectToClassCommand;
 import com.example.modules.classes.adapter.out.persistence.ClassDao;
 import com.example.modules.classes.domain.Class;
 import com.example.modules.subject.adapter.out.persistence.SubjectDao;
@@ -32,7 +31,7 @@ public class AssignSubjectToClassService {
 
         if(subjectIdList == null || subjectIdList.size() == 0) {
             aClass.setSubjectList(new HashSet<>());
-            classDao.update(aClass);
+            classDao.addSubjects(aClass);
             return aClass;
         }
 
@@ -42,7 +41,7 @@ public class AssignSubjectToClassService {
             Set<Subject> subjectSet = new HashSet<>(subjectList);
 
             aClass.setSubjectList(subjectSet);
-            classDao.update(aClass);
+            classDao.addSubjects(aClass);
         }
 
         return aClass;

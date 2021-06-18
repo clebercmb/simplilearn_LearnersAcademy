@@ -19,15 +19,25 @@
         <h1>Assign Teacher to Class</h1>
         <sform:form method="post" action="addAssignTeacherToClass"  modelAttribute="assignTeacherToClassCommand">
 
-            <fieldset style="width: 500px; display: flex; flex-direction: column; align-items: start">
-                <legend>Choose Teacher for:  <strong>${assignTeacherToClassCommand.aClass.id}-${assignTeacherToClassCommand.aClass.name} </strong></legend>
+            <fieldset style="width: 600px; display: flex; flex-direction: column; align-items: start">
+                <legend>Choose Teacher for:  <strong>${assignTeacherToClassCommand.aClass.classId}-${assignTeacherToClassCommand.aClass.name} </strong></legend>
 
-                <sform:hidden path="idClass" value="${assignTeacherToClassCommand.aClass.id}"  />
-                <c:forEach items="${assignTeacherToClassCommand.teacherList}" var="teacher">
-                    <label>
-                        <sform:checkbox path="studentListIds" value="${teacher.id}-"  checked="${student.checked}"  /> ${teacher.name}
-                    </label><br/>
-                </c:forEach>
+                <sform:hidden path="idClass" value="${assignTeacherToClassCommand.aClass.classId}"  />
+
+                <c:forEach items="${assignTeacherToClassCommand.aClass.subjectList}" var="subject">
+                    <fieldset style="width: 600px; display: flex; flex-direction: column; align-items: start">
+                        <legend>Choose Teacher for:  <strong>${subject.subjectId}-${subject.name} </strong></legend>
+
+                        <c:forEach items="${subject.teacherList}" var="teacher">
+                            <label>
+                                <sform:checkbox path="teacherListId" value="${subject.subjectId}|${teacher.teacherId}" checked="${teacher.isChecked}" /> ${teacher.name}
+                            </label><br/>
+                        </c:forEach>
+
+                    </fieldset>
+
+                 </c:forEach>
+
                 <br/> <br/>
                 <input type="submit"/>
             </fieldset>

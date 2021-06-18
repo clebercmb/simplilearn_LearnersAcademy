@@ -2,8 +2,12 @@ package com.example.modules.classes.adapter.out.persistence;
 
 import com.example.config.HibernateUtil;
 import com.example.modules.classes.domain.Class;
+import com.example.modules.classes.domain.ClassSubjectTeacherLink;
+import com.example.modules.student.domain.Student;
+import com.example.modules.classes.dto.TeacherClassDto;
 import com.example.modules.subject.adapter.out.persistence.SubjectDao;
 import com.example.modules.subject.domain.Subject;
+import com.example.modules.teacher.domain.Teacher;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -11,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class ClassDaoImpl implements ClassDao {
@@ -47,6 +48,7 @@ public class ClassDaoImpl implements ClassDao {
             System.out.println("$$$$$$$$$Class="+aClass);
 
             transaction.commit();
+            session.close();
         } catch (Exception ex) {
             if(transaction != null) {
                 transaction.rollback();
@@ -78,10 +80,10 @@ public class ClassDaoImpl implements ClassDao {
       //      List<Subject> subjectList = aClass.getSubjectList();
       //      System.out.println(">>>>>>subjectList.size="+subjectList.size());
             transaction.commit();
+            session.close();
             return Optional.ofNullable(aClass);
 
         } catch (Exception ex) {
-
             System.out.println(ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
@@ -99,6 +101,7 @@ public class ClassDaoImpl implements ClassDao {
 
             Query<Class> query = session.createQuery("from Class");
             aClasses = query.list();
+            session.close();
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -109,45 +112,38 @@ public class ClassDaoImpl implements ClassDao {
     }
 
     @Override
-    public Optional<Object> update(Class classUpdated) {
+    public Optional<Object> addSubjects(Class classUpdated) {
         Transaction transaction = null;
         Set<Subject> subjectList = classUpdated.getSubjectList();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
-
-
-            //Query query = session.createQuery("from Class where classId = :id");
-            //query.setParameter("id", classUpdated.getClassId());
-
-            //List<?> list = query.list();
-            //if(list.size() == 0) {
-            //    return Optional.empty();
-            //}
-            //Class newClass = (Class) list.get(0);
-
             Class newClass = session.load(Class.class, classUpdated.getClassId());
             newClass.getSubjectList().toString();
-            newClass.setName("Class NOVA");
+            int size = newClass.getSubjectList().size();
 
-            //newClass.setStudentList(classUpdated.getStudentList());
-            Set<Subject> subjectSet = new HashSet<>();
+            for(Subject subject : new ArrayList<Subject>(newClass.getSubjectList())) {
+                subject.getClassList().toString();
+                int size5=subject.getClassList().size();
+                newClass.removeSubject(subject);
+                subject.getClassList().remove(newClass);
+                int size6=subject.getClassList().size();
+                session.update(subject);
+            }
+
             for(Subject subject: classUpdated.getSubjectList()) {
                 Subject sub = session.load(Subject.class, subject.getSubjectId());
+
                 sub.toString();
-
-                //sub.getClassList().toString();
-                //sub.getClassList().add(classUpdated);
                 sub.getClassList().add(newClass);
-                //subjectSet.add(sub);
                 newClass.getSubjectList().add(sub);
-                //newClass.getSubjectList().add(sub);
             }
-            //newClass.setSubjectList(subjectSet);
 
-            //session.update(newClass);
-            session.update(newClass);
+            int size3 = newClass.getSubjectList().size();
+
+            session.persist(newClass);
             transaction.commit();
+            session.close();
             return Optional.of(newClass);
 
         } catch (Exception ex) {
@@ -156,6 +152,42 @@ public class ClassDaoImpl implements ClassDao {
             throw new ExceptionInInitializerError(ex);
         }
         
+    }
+
+    @Override
+    public Optional<Object> addStudents(Class classUpdated) {
+        Transaction transaction = null;
+        Set<Subject> subjectList = classUpdated.getSubjectList();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Class newClass = session.load(Class.class, classUpdated.getClassId());
+            newClass.getStudentList().toString();
+            int size = newClass.getStudentList().size();
+
+            //newClass.setStudentList(classUpdated.getStudentList());
+            //int size2 = newClass.getStudentList().size();
+
+
+            List<Student> studentList = new ArrayList<>(classUpdated.getStudentList());
+            List<Student> newStudentList = new ArrayList<>();
+            for(Student student: studentList) {
+                Student s = session.load(Student.class, student.getStudentId());
+                newStudentList.add(s);
+                //newClass.getStudentList().add(s);
+            }
+            newClass.setStudentList(newStudentList);
+            session.persist(newClass);
+            transaction.commit();
+            session.close();
+            return Optional.of(newClass);
+
+        } catch (Exception ex) {
+
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
     }
 
     @Override
@@ -173,6 +205,7 @@ public class ClassDaoImpl implements ClassDao {
             System.out.println("$$$$$$$$$Class delete.result = "+ result);
 
             transaction.commit();
+            session.close();
         } catch (Exception ex) {
             if(transaction != null) {
                 transaction.rollback();
@@ -182,4 +215,160 @@ public class ClassDaoImpl implements ClassDao {
         }
 
     }
+
+
+    @Override
+    @Transactional
+    public List<Class> getAllAssignedStudentsExcludingIdClass(int id) {
+        System.out.println("$$$$$$$$$Class.getAllAssignedStudentsExcludingIdClass");
+        List<Class> aClasses = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query<Class> query = session.createQuery("SELECT a FROM Class a LEFT JOIN FETCH a.studentList where a.classId <> :id", Class.class);
+            query.setParameter("id", id);
+            aClasses = query.list();
+
+            //aClasses.forEach(c -> c.getStudentList());
+            transaction.commit();
+            session.close();
+
+   //         HibernateUtil.shutDown();
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        return aClasses;
+    }
+
+
+    @Override
+    @Transactional
+    public Class getClassWithSubjectList(int id) {
+        System.out.println("$$$$$$$$$Class.getClassWithSubjectList");
+        Class aClass = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query<Class> query = session.createQuery(
+            "SELECT a FROM Class as a " +
+                "LEFT JOIN FETCH a.subjectList as b " +
+                "LEFT JOIN FETCH b.teacherList as c where a.classId = :id", Class.class);
+            query.setParameter("id", id);
+            aClass = query.stream().findFirst().get();
+
+            aClass.getClassSubjectTeacherLinks().toString();
+            //aClasses.forEach(c -> c.getStudentList());
+            transaction.commit();
+            session.close();
+
+            //         HibernateUtil.shutDown();
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        return aClass;
+    }
+
+    @Override
+    public Optional<Class> addTeachers(int classId, List<TeacherClassDto> teacherClassDtoList) {
+
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query<Class> query = session.createQuery("DELETE FROM ClassSubjectTeacherLink where aClass.classId = :id");
+            query.setParameter("id",classId);
+            query.executeUpdate();
+
+            Class newClass = session.load(Class.class, classId);
+            newClass.getStudentList().toString();
+            int size = newClass.getStudentList().size();
+
+            Set<ClassSubjectTeacherLink> newTeacherList = new HashSet<>();
+            for(TeacherClassDto teacher: teacherClassDtoList) {
+                ClassSubjectTeacherLink newTeacher = new ClassSubjectTeacherLink();
+                Subject subjectClass = session.load(Subject.class, teacher.getIdSubject());
+                Teacher teacherClass = session.load(Teacher.class, teacher.getIdTeacher());
+                newTeacher.setaClass(newClass);
+                newTeacher.setSubject(subjectClass);
+                newTeacher.setTeacher(teacherClass);
+
+                newTeacherList.add(newTeacher);
+            }
+            newClass.setClassSubjectTeacherLinks(newTeacherList);
+            session.persist(newClass);
+            transaction.commit();
+            session.close();
+            return Optional.of(newClass);
+
+        } catch (Exception ex) {
+
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
+    }
+
+    @Override
+    public Set<ClassSubjectTeacherLink> getAssignedTeachers(int classId) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query<ClassSubjectTeacherLink> query = session.createQuery("FROM ClassSubjectTeacherLink where aClass.classId = :id");
+            query.setParameter("id",classId);
+            List<ClassSubjectTeacherLink> teacherClassList = query.list();
+            Set<ClassSubjectTeacherLink> teacherClassSet = new HashSet<>();
+            teacherClassSet.addAll(teacherClassList);
+
+
+            transaction.commit();
+            session.close();
+            return teacherClassSet;
+
+        } catch (Exception ex) {
+
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
+    }
+
+    @Override
+    public Class getClassAssignedTeacherList(int idClass) {
+        System.out.println("$$$$$$$$$Class.getClassAssignedTeacherList");
+        Class aClass = null;
+
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Query<Class> query = session.createQuery("SELECT a FROM Class a LEFT JOIN FETCH a.classSubjectTeacherLinks where a.classId = :id", Class.class);
+            query.setParameter("id", idClass);
+            aClass = query.stream().findFirst().get();
+
+            //aClasses.forEach(c -> c.getStudentList());
+            transaction.commit();
+            session.close();
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            throw new ExceptionInInitializerError(ex);
+        }
+
+        return aClass;
+    }
+
+
 }

@@ -23,21 +23,28 @@ public class ClassController {
     private final AssignStudentToClassService assignStudentToClassService;
     private final GetClassWithStudentsService getClassWithStudentsService;
 
+    private final GetSubjectsToAssignTeachersToClassService getSubjectsToAssignTeachersToClassService;
+
+    private final AssignTeacherToClassService assignTeacherToClassService;
 
     public ClassController(CreateClassService createClassService,
                            GetAllClassService getAllClassService,
                            DeleteClassService deleteClassService,
                            AssignSubjectToClassService assignSubjectToClassService,
                            GetClassWithSubjectsService getClassWithSubjectsService,
+                           AssignStudentToClassService assignStudentToClassService,
                            GetClassWithStudentsService getClassWithStudentsService,
-                           AssignStudentToClassService assignStudentToClassService) {
+                           GetSubjectsToAssignTeachersToClassService getSubjectsToAssignTeachersToClassService,
+                           AssignTeacherToClassService assignTeacherToClassService) {
         this.createClassService = createClassService;
         this.getAllClassService = getAllClassService;
         this.deleteClassService = deleteClassService;
         this.assignSubjectToClassService = assignSubjectToClassService;
         this.getClassWithSubjectsService = getClassWithSubjectsService;
-        this.getClassWithStudentsService = getClassWithStudentsService;
         this.assignStudentToClassService = assignStudentToClassService;
+        this.getClassWithStudentsService = getClassWithStudentsService;
+        this.getSubjectsToAssignTeachersToClassService = getSubjectsToAssignTeachersToClassService;
+        this.assignTeacherToClassService = assignTeacherToClassService;
     }
 
     @RequestMapping("registerClass")
@@ -129,6 +136,31 @@ public class ClassController {
         return "redirect:/classDashboard";
     }
 
+
+    @RequestMapping("showAssignTeacherToClass")
+    public String showAssignTeacherToClass(Model map, @RequestParam String id) {
+        System.out.println("ClassController.showAssignSubjectToClass.id=" + id);
+
+        AssignTeacherToClassCommand assignTeacherToClassCommand;
+        assignTeacherToClassCommand = getSubjectsToAssignTeachersToClassService.execute(Integer.parseInt(id));
+
+        map.addAttribute("assignTeacherToClassCommand", assignTeacherToClassCommand);
+
+        return "showAssignTeacherToClass";
+    }
+
+
+    @RequestMapping("addAssignTeacherToClass")
+    public String addAssignTeacherToClass(@ModelAttribute("assignTeacherToClassCommand") AssignTeacherToClassCommand assignTeacherToClassCommand, Model map){
+        System.out.println(">>>>>>ClassController.addAssignStudentToClass");
+        System.out.println("ClassController.assignTeacherToClassCommand="+ assignTeacherToClassCommand);
+
+        Class aClass = assignTeacherToClassService.execute(assignTeacherToClassCommand);
+
+        map.addAttribute("aClass", aClass);
+
+        return "redirect:/classDashboard";
+    }
 
     @RequestMapping("classReport")
     public String classReport(Model map, @RequestParam String id) {
