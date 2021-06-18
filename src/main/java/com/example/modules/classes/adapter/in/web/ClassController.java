@@ -1,6 +1,7 @@
 package com.example.modules.classes.adapter.in.web;
 
 import com.example.modules.classes.domain.Class;
+import com.example.modules.classes.dto.ClassDto;
 import com.example.modules.classes.services.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,8 @@ public class ClassController {
 
     private final AssignTeacherToClassService assignTeacherToClassService;
 
+    private final ClassReportService classReportService;
+
     public ClassController(CreateClassService createClassService,
                            GetAllClassService getAllClassService,
                            DeleteClassService deleteClassService,
@@ -35,7 +38,8 @@ public class ClassController {
                            AssignStudentToClassService assignStudentToClassService,
                            GetClassWithStudentsService getClassWithStudentsService,
                            GetSubjectsToAssignTeachersToClassService getSubjectsToAssignTeachersToClassService,
-                           AssignTeacherToClassService assignTeacherToClassService) {
+                           AssignTeacherToClassService assignTeacherToClassService,
+                           ClassReportService classReportService) {
         this.createClassService = createClassService;
         this.getAllClassService = getAllClassService;
         this.deleteClassService = deleteClassService;
@@ -45,6 +49,7 @@ public class ClassController {
         this.getClassWithStudentsService = getClassWithStudentsService;
         this.getSubjectsToAssignTeachersToClassService = getSubjectsToAssignTeachersToClassService;
         this.assignTeacherToClassService = assignTeacherToClassService;
+        this.classReportService = classReportService;
     }
 
     @RequestMapping("registerClass")
@@ -163,11 +168,16 @@ public class ClassController {
     }
 
     @RequestMapping("classReport")
-    public String classReport(Model map, @RequestParam String id) {
+    public String classReport(Model model, @RequestParam String id) {
         System.out.println("classReport.id="+ id);
+
+        ClassDto classDto = classReportService.execute(Integer.parseInt(id));
+        model.addAttribute("aClass", classDto);
 
         return "classReport";
     }
+
+
 
 
 

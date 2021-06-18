@@ -7,14 +7,17 @@ public class ClassDto {
     private int classId;
     private String name;
     private Set<SubjectDto> subjects;
+    private Set<StudentDto> students;
+
 
     public ClassDto() {
     }
 
-    public ClassDto(int classId, String name, Set<SubjectDto> subjects) {
+    public ClassDto(int classId, String name, Set<SubjectDto> subjects, Set<StudentDto> students) {
         this.classId = classId;
         this.name = name;
         this.subjects = subjects;
+        this.students = students;
     }
 
     public int getClassId() {
@@ -41,11 +44,27 @@ public class ClassDto {
         this.subjects = subjects;
     }
 
+    public Set<StudentDto> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<StudentDto> students) {
+        this.students = students;
+    }
+
     public void addSubject(SubjectDto subject) {
         getSubjects().add(subject);
     }
 
     public void removeSubject(SubjectDto subject) {
         getSubjects().remove(subject);
+    }
+
+    public void addStudent(StudentDto student) {
+        getStudents().add(student);
+    }
+
+    public void removeStudent(StudentDto student) {
+        getStudents().remove(student);
     }
 }

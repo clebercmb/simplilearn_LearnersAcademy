@@ -29,10 +29,6 @@ public class GetSubjectsToAssignTeachersToClassService {
     public AssignTeacherToClassCommand execute(int idClass) {
 
         Class aClass = classDao.getClassWithSubjectList(idClass);
-
-        //Set<ClassSubjectTeacherLink> classSubjectTeacherLink = classDao.getAssignedTeachers(idClass);
-
-
         ClassDto classDto = new ClassDto();
         classDto.setClassId(aClass.getClassId());
         classDto.setName(aClass.getName());
