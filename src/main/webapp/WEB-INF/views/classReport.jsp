@@ -24,7 +24,7 @@
 
             <c:forEach items="${aClass.subjects}" var="subject">
                 <fieldset style="width: 600px; display: flex; flex-direction: column; align-items: start">
-                    <legend>Choose Teacher for:  <strong>${subject.subjectId}-${subject.name} </strong></legend>
+                    <legend>Teacher(s) for:  <strong>${subject.subjectId}-${subject.name} </strong></legend>
 
                     <c:forEach items="${subject.teachers}" var="teacher">
                         <label>
@@ -37,6 +37,22 @@
             </c:forEach>
 
             <br/> <br/>
+
+
+            <fieldset style="width: 600px; display: flex; flex-direction: column; align-items: start">
+                <legend><strong>Students:</strong></legend>
+                <c:forEach items="${aClass.students}" var="student">
+                    <label>
+                            ${student.studentId}-${student.name}
+                    </label><br/>
+                </c:forEach>
+            </fieldset>
+
+
+
+            <br/> <br/>
+
+
 
         </fieldset>
 

@@ -67,7 +67,9 @@ public class ClassReportService {
 
         }
 
-        for(Student student : aClass.getStudentList()) {
+        Class classWithStudents = classDao.get(classId).get();
+        classDto.setStudents(new HashSet<>());
+        for(Student student : classWithStudents.getStudentList()) {
             StudentDto studentDto = new StudentDto();
             studentDto.setStudentId(student.getStudentId());
             studentDto.setName(student.getName());
