@@ -3,8 +3,9 @@ package com.example.modules.classes.adapter.out.persistence;
 import com.example.config.HibernateUtil;
 import com.example.modules.classes.domain.Class;
 import com.example.modules.classes.domain.ClassSubjectTeacherLink;
+import com.example.modules.classes.dto.ClassSubjectTeacherIdsDto;
 import com.example.modules.student.domain.Student;
-import com.example.modules.classes.dto.TeacherClassDto;
+import com.example.modules.classes.dto.ClassDto;
 import com.example.modules.subject.adapter.out.persistence.SubjectDao;
 import com.example.modules.subject.domain.Subject;
 import com.example.modules.teacher.domain.Teacher;
@@ -258,10 +259,11 @@ public class ClassDaoImpl implements ClassDao {
 
             Query<Class> query = session.createQuery(
             "SELECT a FROM Class as a " +
-                "LEFT JOIN FETCH a.subjectList as b " +
-                "LEFT JOIN FETCH b.teacherList as c where a.classId = :id", Class.class);
+                "where a.classId = :id", Class.class);
             query.setParameter("id", id);
             aClass = query.stream().findFirst().get();
+
+
 
             aClass.getClassSubjectTeacherLinks().toString();
             //aClasses.forEach(c -> c.getStudentList());
@@ -279,7 +281,7 @@ public class ClassDaoImpl implements ClassDao {
     }
 
     @Override
-    public Optional<Class> addTeachers(int classId, List<TeacherClassDto> teacherClassDtoList) {
+    public Optional<Class> addTeachers(int classId, List<ClassSubjectTeacherIdsDto> classDtoList) {
 
         Transaction transaction = null;
 
@@ -295,10 +297,10 @@ public class ClassDaoImpl implements ClassDao {
             int size = newClass.getStudentList().size();
 
             Set<ClassSubjectTeacherLink> newTeacherList = new HashSet<>();
-            for(TeacherClassDto teacher: teacherClassDtoList) {
+            for(ClassSubjectTeacherIdsDto teacher: classDtoList) {
                 ClassSubjectTeacherLink newTeacher = new ClassSubjectTeacherLink();
-                Subject subjectClass = session.load(Subject.class, teacher.getIdSubject());
-                Teacher teacherClass = session.load(Teacher.class, teacher.getIdTeacher());
+                Subject subjectClass = session.load(Subject.class, teacher.getSubjectId());
+                Teacher teacherClass = session.load(Teacher.class, teacher.getTeacherId());
                 newTeacher.setaClass(newClass);
                 newTeacher.setSubject(subjectClass);
                 newTeacher.setTeacher(teacherClass);

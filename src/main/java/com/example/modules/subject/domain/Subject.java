@@ -28,7 +28,7 @@ public class Subject {
     @JoinTable(name = "subject_class", joinColumns = { @JoinColumn(name = "subject_id") }, inverseJoinColumns = { @JoinColumn(name = "class_id") })
     private Set<Class> classList = new HashSet<>();
 
-    @ManyToMany(mappedBy="subjectList")
+    @ManyToMany(mappedBy="subjectList", fetch = FetchType.EAGER)
     private List<Teacher> teacherList;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)

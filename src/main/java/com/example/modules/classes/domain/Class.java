@@ -21,7 +21,7 @@ public class Class {
     @Column(name="name", nullable = false, length = 30)
     private String name;
 
-    @ManyToMany(mappedBy = "classList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "classList", fetch = FetchType.EAGER)
     private Set<Subject> subjectList = new HashSet<>();
 
     @ManyToMany(mappedBy = "teacherClassList", fetch = FetchType.LAZY)
@@ -30,7 +30,7 @@ public class Class {
     @OneToMany(targetEntity = Student.class, cascade =  CascadeType.ALL)
     private List<Student> studentList;
 
-    @OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "aClass", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ClassSubjectTeacherLink> classSubjectTeacherLinks;
 
 

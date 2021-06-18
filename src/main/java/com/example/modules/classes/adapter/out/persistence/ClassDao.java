@@ -3,7 +3,8 @@ package com.example.modules.classes.adapter.out.persistence;
 
 import com.example.modules.classes.domain.Class;
 import com.example.modules.classes.domain.ClassSubjectTeacherLink;
-import com.example.modules.classes.dto.TeacherClassDto;
+import com.example.modules.classes.dto.ClassDto;
+import com.example.modules.classes.dto.ClassSubjectTeacherIdsDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public interface ClassDao {
 
     public Class getClassWithSubjectList(int idClass);
 
-    public Optional<Class> addTeachers(int classId, List<TeacherClassDto> teacherList);
+    public Optional<Class> addTeachers(int classId, List<ClassSubjectTeacherIdsDto> teacherList);
 
     public Set<ClassSubjectTeacherLink> getAssignedTeachers(int classId);
 

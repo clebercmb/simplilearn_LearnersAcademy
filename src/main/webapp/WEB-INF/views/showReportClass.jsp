@@ -10,7 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Assign Teacher to Class</title>
+    <title>Report Class</title>
 </head>
 <body>
     <%@include file="header.jsp"%>
